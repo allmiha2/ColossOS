@@ -1,15 +1,12 @@
 void clear_screen_VGAText();
 void set_frame_with_string_VGAText(char *string);
-int get_size_of_string(char *string);
 void add_string_to_video_memory_VGAText(char *string);
-
-// TODO: no sprintf allowed
 void int_to_string(int number, char *buffer);
 
 void main() {
-    char str[55] = "Cine are noroc are";
     set_frame_with_string_VGAText("Cine are noroc are");
     for (volatile int i = 0; i < 1000000000; i++) {
+        // sleep
     }
     set_frame_with_string_VGAText("Welcome, peasant!");
 }
@@ -20,19 +17,8 @@ void clear_screen_VGAText()
     for(int i = 0; i < 80*25; i += 2) 
     {
         *(video_memory + i) = ' '; // character
-        *(video_memory + i + 1) = 0x0F; // color attribute
+        *(video_memory + i + 1) = 0x0F; // color attribute (white foreground, black background)
     }
-}
-
-int get_size_of_string(char *string) 
-{
-    int i = 0;
-    while (*(string + i) != '\0') 
-    {
-        i++;
-    }
-
-    return i;
 }
 
 void set_frame_with_string_VGAText(char *string) 
@@ -65,6 +51,8 @@ void add_string_to_video_memory_VGAText(char *string)
     }
 }
 
+
+// TODO: move to a utils.c file or something
 void int_to_string(int n, char *buffer) 
 {
     // should maybe use a pow method but too lazy
