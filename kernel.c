@@ -1,7 +1,16 @@
 void clear_screen_VGAText();
 void set_frame_with_string_VGAText(char *string);
 void add_string_to_video_memory_VGAText(char *string);
+
+//void initialize_cursor();
+
 void int_to_string(int number, char *buffer);
+
+// add a character at cursor
+// move cursor left/right/up/down
+// move cursor to coordinate 
+// unmodifiable buffer, modifiable buffer - cursor only in modifiable
+
 
 void main() {
     set_frame_with_string_VGAText("Cine are noroc are");
