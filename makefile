@@ -7,23 +7,29 @@ CC = i686-elf-gcc
 LD = i686-elf-ld
 AS = nasm
 
-CFLAGS = -ffreestanding -fno-pie -fno-pic
+CFLAGS = -ffreestanding -fno-pie -fno-pic -Isrc/vga -Isrc/utils
 
 all: run
 
 build:
 	mkdir -p build
 
-build/kernel.bin: build/kernel-entry.o build/kernel.o | build
+build/kernel.bin: build/kernel-entry.o build/kernel.o build/vga-text-driver.o build/conversions.o | build
 	$(LD) -o $@ -Ttext 0x1000 $^ --oformat binary
 
-build/kernel-entry.o: kernel-entry.asm | build
-	$(AS) $< -f elf32 -o $@
-
-build/kernel.o: kernel.c | build
+build/kernel.o: src/kernel/kernel.c | build
 	$(CC) $(CFLAGS) -c $< -o $@
 
-build/boot.bin: boot.asm | build
+build/vga-text-driver.o: src/vga/vga-text-driver.c | build
+	$(CC) $(CFLAGS) -c $< -o $@
+
+build/conversions.o: src/utils/conversions.c | build
+	$(CC) $(CFLAGS) -c $< -o $@
+
+build/kernel-entry.o: src/bootloader/kernel-entry.asm | build
+	$(AS) $< -f elf32 -o $@
+
+build/boot.bin: src/bootloader/boot.asm | build
 	$(AS) $< -f bin -o $@
 
 build/os-image.bin: build/boot.bin build/kernel.bin | build

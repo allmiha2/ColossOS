@@ -1,0 +1,1 @@
+void int_to_string(int number, char *buffer);

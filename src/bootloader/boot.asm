@@ -18,9 +18,9 @@ call switch_to_32bit
 ; loop here if fall through above to not execute unkown memory
 jmp $
 
-%include "disk.asm"
-%include "gdt.asm"
-%include "switch-to-32bit.asm"
+%include "src/bootloader/disk.asm"
+%include "src/bootloader/gdt.asm"
+%include "src/bootloader/switch-to-32bit.asm"
 
 [bits 16]
 load_kernel:
