@@ -1,11 +1,13 @@
 #include "vga-text-driver.h"
+// VGA Text mode has 80x25 cells, each cell having 2 bytes
+
 void clear_screen_VGAText() 
 {
     char* video_memory = (char*) 0xb8000;
-    for(int i = 0; i < 80*25; i += 2) 
+    for(int i = 0; i < 80*25; i++) 
     {
-        *(video_memory + i) = ' '; // character
-        *(video_memory + i + 1) = 0x0F; // color attribute (white foreground, black background)
+        *(video_memory + (2 * i)) = ' '; // character
+        *(video_memory + (2 * i) + 1) = 0x0F; // color attribute (white foreground, black background)
     }
 }
 
