@@ -12,15 +12,27 @@ const int COLUMNS = 80;
 // - make sure the input strings do not exceed the 80x25 grid
 
 void add_string_to_video_memory_VGAText(char *string);
+void set_char_at_linear_cell_index_VGAText(char c, int i);
+void set_colorcode_at_linear_cell_index_VGAText(int c, int i);
 
 char* video_memory = (char*) 0xb8000;
+
+void set_char_at_linear_cell_index_VGAText(char c, int i) 
+{
+    *(video_memory + (2 * i)) = c; // character
+}
+
+void set_colorcode_at_linear_cell_index_VGAText(int c, int i) 
+{
+    *(video_memory + (2 * i) + 1) = c; // color attribute
+}
 
 void clear_screen_VGAText(void)
 {
     for(int i = 0; i < ROWS * COLUMNS; i++) 
     {
-        *(video_memory + (2 * i)) = ' '; // character
-        *(video_memory + (2 * i) + 1) = 0x0F; // color attribute (white foreground, black background)
+        set_char_at_linear_cell_index_VGAText(' ', i); // character
+        set_colorcode_at_linear_cell_index_VGAText(0x0F, i); // color attribute (white foreground, black background)
     }
 }
 
@@ -34,7 +46,7 @@ void add_character_at_VGAText(char c, int row, int column)
     // find the cell index in the linear memory
     int index = row * COLUMNS + column;
 
-    *(video_memory + (2 * index)) = c;
+    set_char_at_linear_cell_index_VGAText(c, index);
 }
 
 void add_string_at_VGAText(char *string, int row, int column)
@@ -56,8 +68,8 @@ void add_string_at_VGAText(char *string, int row, int column)
             charToBePrinted = ' ';
         }
 
-        *(video_memory + (2 * i)) = charToBePrinted; // character
-        *(video_memory + (2 * i) + 1) = 0x0F; // color attribute
+        set_char_at_linear_cell_index_VGAText(charToBePrinted, i); // character
+        set_colorcode_at_linear_cell_index_VGAText(0x0F, i); // color attribute
     }
 }
 
@@ -85,7 +97,7 @@ void add_string_to_video_memory_VGAText(char *string)
             charToBePrinted = ' ';
         }
 
-        *(video_memory + (2 * i)) = charToBePrinted; // character
-        *(video_memory + (2 * i) + 1) = 0x0F; // color attribute
+        set_char_at_linear_cell_index_VGAText(charToBePrinted, i); // character
+        set_colorcode_at_linear_cell_index_VGAText(0x0F, i); // color attribute
     }
 }
