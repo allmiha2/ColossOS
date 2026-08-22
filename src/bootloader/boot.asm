@@ -25,7 +25,7 @@ jmp $
 [bits 16]
 load_kernel:
     mov bx, KERNEL_OFFSET ; bx destination
-    mov dh, 2 ; dh num of sectors
+    mov dh, 10 ; dh num of sectors
     mov dl, [BOOT_DRIVE] ; dl - disk
     call disk_load
     ret

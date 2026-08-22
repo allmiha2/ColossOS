@@ -14,13 +14,13 @@ all: run
 build:
 	mkdir -p build
 
-build/kernel.bin: build/kernel-entry.o build/kernel.o build/vga-text-driver.o build/conversions.o | build
+build/kernel.bin: build/kernel-entry.o build/kernel.o build/vga_text_driver.o build/conversions.o | build
 	$(LD) -o $@ -Ttext 0x1000 $^ --oformat binary
 
 build/kernel.o: src/kernel/kernel.c | build
 	$(CC) $(CFLAGS) -c $< -o $@
 
-build/vga-text-driver.o: src/vga/vga-text-driver.c | build
+build/vga_text_driver.o: src/vga/vga_text_driver.c | build
 	$(CC) $(CFLAGS) -c $< -o $@
 
 build/conversions.o: src/utils/conversions.c | build

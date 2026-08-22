@@ -1,3 +1,5 @@
+#include "conversions.h"
+
 void int_to_string(int n, char *buffer) 
 {
     // should maybe use a pow method but too lazy
