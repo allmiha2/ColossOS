@@ -1,26 +1,5 @@
 #include <stdint.h>
-
-static inline void outb(uint16_t port, uint8_t value)
-{
-    __asm__ volatile (
-        "outb %0, %1"
-        :
-        : "a"(value), "Nd"(port)
-    );
-}
-
-static inline uint8_t inb(uint16_t port)
-{
-    uint8_t value;
-
-    __asm__ volatile (
-        "inb %1, %0"
-        : "=a"(value)
-        : "Nd"(port)
-    );
-
-    return value;
-}
+#include "io.h"
 
 static bool ps2_output_ready(void)
 {
@@ -64,6 +43,8 @@ static void ps2_write_data(uint8_t data)
 
 static uint8_t ps2_read_data(void)
 {
+    // TODO: for interrupts do not wait. you can use the condition in an if instead of while
+    // (The PS/2 controller generates IRQ1 because keyboard data has arrived => data already available)
     ps2_wait_for_output();
     return inb(0x60);
 }
@@ -78,7 +59,7 @@ void ps2_controller_init(void)
 
     // We are not using/detecting a second port yet
 
-    // Flush any byte already sitting in the output buffer
+    // Flush any byte already sitting in the output buffer (stale)
     if (ps2_output_ready())
     {
         inb(0x60);
@@ -91,6 +72,9 @@ void ps2_controller_init(void)
     // Bit 0 = first-port IRQ
     // Bit 4 = first-port clock disabled
     // Bit 6 = first-port translation
+
+
+    // Once your IDT, PIC, and keyboard interrupt handler are ready, you can enable IRQ1 generation in the PS/2 controller, unmask IRQ1 in the PIC, and enable CPU interrupts.
 
     // Disable IRQ1 and translation
     // and ensure first-port clock is enabled
